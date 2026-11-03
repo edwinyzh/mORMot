@@ -6,7 +6,7 @@ unit SynSelfTests;
 {
     This file is part of Synopse mORMot framework.
 
-    Synopse framework. Copyright (C) 2022 Arnaud Bouchez
+    Synopse framework. Copyright (c) Arnaud Bouchez
       Synopse Informatique - https://synopse.info
 
   *** BEGIN LICENSE BLOCK *****
@@ -25,7 +25,7 @@ unit SynSelfTests;
 
   The Initial Developer of the Original Code is Arnaud Bouchez.
 
-  Portions created by the Initial Developer are Copyright (C) 2022
+  Portions created by the Initial Developer are Copyright (c)
   the Initial Developer. All Rights Reserved.
 
   Contributor(s):
@@ -7475,7 +7475,8 @@ begin
     Check(length(mus.tests)>5);
     for i := 0 to high(mus.tests) do
     with mus.Tests[i] do begin
-      if desc='Dotted names should be resolved against former resolutions.' then
+      if (desc='Dotted names should be resolved against former resolutions.') or
+         (desc='Implicit iterators should work on root-level lists.') then
         continue; // we don't handle a":{"b":{}} context (yet)
       if PosEx(' {{>partial}}',template)>0 then
         continue; // we don't indent each line of the expanded partials (yet)

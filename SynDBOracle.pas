@@ -6,7 +6,7 @@ unit SynDBOracle;
 {
     This file is part of Synopse framework.
 
-    Synopse framework. Copyright (C) 2022 Arnaud Bouchez
+    Synopse framework. Copyright (c) Arnaud Bouchez
       Synopse Informatique - https://synopse.info
 
   *** BEGIN LICENSE BLOCK *****
@@ -25,7 +25,7 @@ unit SynDBOracle;
 
   The Initial Developer of the Original Code is Arnaud Bouchez.
 
-  Portions created by the Initial Developer are Copyright (C) 2022
+  Portions created by the Initial Developer are Copyright (c)
   the Initial Developer. All Rights Reserved.
 
   Contributor(s):
@@ -2606,6 +2606,10 @@ begin
   case Status of
   OCI_SUCCESS:
     fRowFetched := fRowCount; // all rows successfully retrieved
+  OCI_SUCCESS_WITH_INFO: begin
+    fRowFetched := fRowCount; // all rows successfully retrieved but got a warning
+    OCI.Check(nil,self,Status,fError,false); // will log warning message
+  end;
   OCI_NO_DATA: begin
     OCI.AttrGet(fStatement,OCI_HTYPE_STMT,@fRowFetched,nil,OCI_ATTR_ROWS_FETCHED,fError);
     fRowFetchedEnded := true;

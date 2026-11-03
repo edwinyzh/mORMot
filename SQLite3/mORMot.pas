@@ -6,7 +6,7 @@ unit mORMot;
 (*
     This file is part of Synopse mORMot framework.
 
-    Synopse mORMot framework. Copyright (C) 2022 Arnaud Bouchez
+    Synopse mORMot framework. Copyright (c) Arnaud Bouchez
       Synopse Informatique - https://synopse.info
 
   *** BEGIN LICENSE BLOCK *****
@@ -25,7 +25,7 @@ unit mORMot;
 
   The Initial Developer of the Original Code is Arnaud Bouchez.
 
-  Portions created by the Initial Developer are Copyright (C) 2022
+  Portions created by the Initial Developer are Copyright (c)
   the Initial Developer. All Rights Reserved.
 
   Contributor(s):
@@ -29811,10 +29811,11 @@ end;
 
 function TEnumType.SizeInStorageAsSet: Integer;
 begin
-  case MaxValue of
-  0..7:   result := 1;
-  8..15:  result := 2;
-  16..31: result := 4;
+  case MaxValue of // our code (e.g. in smvSet) supports up to Int64
+  0..7:   result := SizeOf(byte);
+  8..15:  result := SizeOf(word);
+  16..31: result := SizeOf(cardinal);
+  32..63: result := SizeOf(Int64);
   else    result := 0;
   end;
 end;
@@ -58442,8 +58443,7 @@ begin
       CreateWithResolverAndRest(Rest.Services,self,RestServer,true);
   ickFromInjectedResolver: begin
     dummyObj := nil;
-    if not TSQLRestServer(Rest).Services.
-       TryResolveInternal(fInterface.fInterfaceTypeInfo,dummyObj) then
+    if not Rest.Services.TryResolveInternal(fInterface.fInterfaceTypeInfo,dummyObj) then
       raise EInterfaceFactoryException.CreateUTF8(
         'ickFromInjectedResolver: TryResolveInternal(%)=false',[fInterface.fInterfaceName]);
     result := TInterfacedObject(ObjectFromInterface(IInterface(dummyObj)));
